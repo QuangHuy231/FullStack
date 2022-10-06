@@ -1,0 +1,127 @@
+npm init
+tạo file package.json
+entry point server.js
+keywords: từ khóa tìm kiếm trên github
+author tác giả
+
+//cài thư viên express
+npm install body-parser@1.19.0 //viết api ,lấy các client gửi lên server
+dotenv@8.2.0 // lấy các tham số tong file môi trường
+ejs@3.1.5 //viewengine
+ express@4.17.1 //framework
+npm install --save-dev @babel/core@7.12.10 @babel/node@7.12.10 @babel/preset-env@7.12.10 @nodemon@2.0.7
+3 cái đầu là trình biên dịch babel
+nodemon có sự thay đổi file thì server tự chạy lại
+
+
+//cấu truc project
+
+tạo thư mục src
+	tạo file server.js // dùng chạy server
+	tạo  thư mục controller
+	tạo thư mục services // đến database
+	folder config // cấu hình tham số
+	folder views //các file render html 
+	folder public // các hình ảnh , css
+	folder route //chứa các route : các đường link
+
+file .env //tham số môi trường
+PORT = 8080
+
+file .env.example //file đẩy lên github giống file env không ghi giá trị vào
+PORT = 
+
+file .gitignore //quy định các file đẩy lên server
+/node_modules //không đẩy các file này
+/vendor
+/.idea //chứa cache 
+.idea/
+.env //chứa cổng
+
+
+file .babelrc
+{
+    "presets": ["@babel/preset-env"]
+}
+
+
+xuất hiện node_modules
+
+👉 1. Cài đặt các thư viện: sequlize-cli, sequelize và mysql2
+npm install --save-dev sequelize-cli@6.2.0
+npm install --save mysql2@2.2.5
+npm install --save sequelize@6.6.2
+
+👉 2. Thêm file .sequelizerc tại thư mục root
+Nội dung file .sequelizerc
+const path = require('path');
+module.exports = {
+  'config': path.resolve('./src/config', 'config.json'),
+  'migrations-path': path.resolve('./src', 'migrations'),
+  'models-path': path.resolve('./src', 'models'),
+  'seeders-path': path.resolve('./src', 'seeders')
+}
+
+👉 Tại thư mục root, sử dụng câu lệnh: node_modules/.bin/sequelize init
+
+👉 3. Tạo model: 
+npx sequelize-cli model:generate --name User --attributes firstName:string,lastName:string,email:string
+
+👉 4: Tạo migrations:
+npx sequelize-cli db:migrate
+
+👉5. Tạo Seeder: npx sequelize-cli seed:generate --name demo-user
+
+//kết nối tới database
+
+tạo file connectDB 
+{
+	const { Sequelize } = require('sequelize');
+
+// Option 3: Passing parameters separately (other dialects)
+const sequelize = new Sequelize('nguyenquanghuy', 'root', null, { //database ,username,password
+  host: 'localhost', //địa chỉ server
+  dialect:  'mysql',
+  logging: false //tắt câu thông báo
+});
+
+//in ra kết nối tới db thành công
+let connectDB = async()=>{ 
+    try {
+        await sequelize.authenticate(); //dùng await trên phải có async
+        console.log('Connection has been established successfully.');
+      } catch (error) {
+        console.error('Unable to connect to the database:', error);
+      }
+}
+
+module.exports = connectDB;
+}
+
+//vào server.js 
+import connectDB
+
+gọi hàm connnectDB();
+
+//homecontroller.js
+
+import db from models/index
+
+import db from "../models/index";
+let getHomePage = async(req,res)=>{
+    try{
+        let data = await db.User.findAll();
+        
+        return res.render('homePage.ejs',{
+            data: JSON.stringify(data)
+        });
+    } catch (e) {
+        console.log(e)
+    }
+   
+   
+}
+
+module.exports = {
+    getHomePage: getHomePage,
+}
