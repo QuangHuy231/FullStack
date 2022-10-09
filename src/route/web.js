@@ -7,6 +7,7 @@ let initWebRoutes = (app) => {
   router.get("/nguyenquanghuy", (req, res) => res.send("hello hello"));
   router.get("/crud", homeController.getCrud);
   router.post("/post-crud", homeController.postCrud);
+  router.get("/get-crud", homeController.displayGetCrud);
 
   return app.use("/", router);
 };
