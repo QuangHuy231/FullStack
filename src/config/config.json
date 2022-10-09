@@ -4,7 +4,9 @@
     "password": null,
     "database": "nguyenquanghuy",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "logging": false,
+    "_comment": "day la bỏ log sql"
   },
   "test": {
     "username": "root",

@@ -39,7 +39,7 @@ let getAllUsers = () => {
   return new Promise(async (resolve, reject) => {
     try {
       let users = db.User.findAll({
-        raw: true,
+        raw: true, //lấy giá trị cơ bản
       });
 
       resolve(users);
@@ -49,7 +49,50 @@ let getAllUsers = () => {
   });
 };
 
+let getUserInforById = (id) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let user = await db.User.findOne({
+        where: { id: id },
+        raw: true,
+      });
+      if (user) {
+        resolve(user);
+      } else {
+        resolve({});
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+let updateUserData = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let user = await db.User.findOne({
+        where: {
+          id: data.id,
+        },
+      });
+      if (user) {
+        user.firstName = data.firstName;
+        user.lastName = data.lastName;
+
+        user.address = data.address;
+        user.phoneNumber = data.phone_number;
+        await user.save();
+        resolve();
+      } else {
+        resolve();
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  });
+};
 module.exports = {
   createNewUser,
   getAllUsers,
+  getUserInforById,
+  updateUserData,
 };
