@@ -46,7 +46,10 @@
         <td><%= dataTable[i].address %></td>
         <td>
           <a href="/edit-crud?id=<%= dataTable[i].id%>" type="button">Edit</a>
-          <button type="button">Delete</button>
+          <form action="/delete-crud" method="POST">
+            <input type="text" hidden value="<%= dataTable[i].id%>" name="id" />
+            <button type="submit">Delete</button>
+          </form>
         </td>
       </tr>
       <% } %>

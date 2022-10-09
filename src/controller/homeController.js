@@ -48,6 +48,12 @@ let putCrud = async (req, res) => {
   await CRUDService.updateUserData(data);
   return res.redirect("/get-crud");
 };
+
+let deleteCRUD = async (req, res) => {
+  let userid = req.body.id;
+  await CRUDService.deleteUserById(userid);
+  return res.redirect("/get-crud");
+};
 module.exports = {
   getHomePage: getHomePage,
   getCrud: getCrud,
@@ -55,4 +61,5 @@ module.exports = {
   displayGetCrud: displayGetCrud,
   getEditCrud: getEditCrud,
   putCrud: putCrud,
+  deleteCRUD: deleteCRUD,
 };
